@@ -41,7 +41,7 @@ class HttpExampleWidget extends StatefulWidget {
 }
 
 class _HttpExampleWidgetState extends State<HttpExampleWidget> {
-  String _text = "Http Example";
+  List<Post> _posts = [];
 
   void _fetchPosts() async {
     final response =
@@ -50,7 +50,8 @@ class _HttpExampleWidgetState extends State<HttpExampleWidget> {
         .map<Post>((json) => Post.fromJSON(json))
         .toList();
     setState(() {
-      _text = response.body;
+      _posts.clear();
+      _posts.addAll(parsedResponse);
     });
   }
 
@@ -64,7 +65,16 @@ class _HttpExampleWidgetState extends State<HttpExampleWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text(_text),
+        child: ListView.builder(
+          itemCount: this._posts.length,
+          itemBuilder: (context, index) {
+            final post = this._posts[index];
+            return ListTile(
+              title: Text(post.title),
+              subtitle: Text('Id: ${post.id}  UserId: ${post.userId}'),
+            );
+          },
+        ),
       ),
     );
   }
