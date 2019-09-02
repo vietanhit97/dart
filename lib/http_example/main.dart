@@ -55,6 +55,23 @@ class _HttpExampleWidgetState extends State<HttpExampleWidget> {
     });
   }
 
+  void _createPost() async {
+    final response = await http.post(
+      'https://jsonplaceholder.typicode.com/posts',
+      body: jsonEncode(
+        {
+          'title': 'foo',
+          'body': 'bar',
+          'userId': 1,
+        },
+      ),
+      headers: {'Content-Type': "application/json"},
+    );
+
+    final Post parsedResponse = Post.fromJSON(jsonDecode(response.body));
+    // Use the parsedResponse to diplay the newly created post.
+  }
+
   @override
   void initState() {
     super.initState();
