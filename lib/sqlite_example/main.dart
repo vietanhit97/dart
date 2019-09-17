@@ -80,6 +80,15 @@ class _ContactsState extends State<Contacts> {
     _fetchContacts();
   }
 
+  void _deleteContact(int id) async {
+    await _database.delete(
+      "Contact",
+      where: "id = ?",
+      whereArgs: [id],
+    );
+    _fetchContacts();
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -112,7 +121,12 @@ class _ContactsState extends State<Contacts> {
                 itemCount: _contacts.length,
                 itemBuilder: (context, index) {
                   final contact = _contacts[index];
-                  return Text(contact.phone);
+                  return ListTile(
+                    title: Text(contact.phone),
+                    onLongPress: () {
+                      _deleteContact(contact.id);
+                    },
+                  );
                 },
               ),
             )
